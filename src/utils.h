@@ -11,6 +11,11 @@ typedef struct {
     float view_distance;
     float travel_speed, rot_speed, scale_sens;
 } config_t;
+struct std_stack {
+    int top;
+    struct std_stack *pile;
+};
+typedef struct std_stack std_stack_t;
 
 /* Geometric utils */
 
@@ -32,10 +37,12 @@ typedef struct {
 // TODO
 
 /* Geometry algorithms */
-void linear_interpolation(point2f_t *a, point2f_t *b, 
-                         float paramter, point2f_t *res);
-void bezier_point(point2f_t *control_polygon, size_t polygon_points, 
-                 float parameter, point2f_t *res);
+void linear_interpolation2f(point2f_t *a, point2f_t *b, 
+        float paramter, point2f_t *res);
+void bezier_point2f(point2f_t *control_polygon, size_t polygon_points, 
+        float parameter, point2f_t *res);
+void bezier_curve2f(point2f_t *control_polygon, size_t polygon_points, 
+        point2f_t *curve, unsigned int point_number);
 
 /* Constants */
 
@@ -54,12 +61,17 @@ void string_insert(const char *source, size_t source_len,
                    char *dest);
 
 /* Stack helpers */
+
+/* Standard stack helpers */
+// TODO
+
 /* 2-D stack helpers */
 void update2f_top(float x, float y, float angle,
                 pos2f_stack_t *root);
 void pop2f(pos2f_stack_t **root);
 void push2f(pos2f_t new_top, pos2f_stack_t **root);
 void free2f_stack(pos2f_stack_t *root);
+
 /* 3-D stack helper */
 // TODO
 

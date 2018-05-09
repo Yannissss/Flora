@@ -77,7 +77,7 @@ void free2f_stack(pos2f_stack_t *root)
  * points a, b of a given paramter and store it into
  * res
  */
-void liner_interpolation(point2f_t *a, point2f_t *b, 
+void linear_interpolation2f(point2f_t *a, point2f_t *b, 
                          float parameter, point2f_t *res)
 {
     res->x = (1.0-parameter)*a->x
@@ -92,7 +92,7 @@ void liner_interpolation(point2f_t *a, point2f_t *b,
  * a Bézier curve given its control polygon and store
  * it into res
  */
-void bezier_point(point2f_t *control_polygon, size_t polygon_points, 
+void bezier_point2f(point2f_t *control_polygon, size_t polygon_points, 
                  float parameter, point2f_t *res)
 {
     /* Copying control polygon into a buffer */
@@ -110,11 +110,35 @@ void bezier_point(point2f_t *control_polygon, size_t polygon_points,
         for (int j = 0;j < (polygon_points-j); ++j)
         {
             point2f_t point_buffer;
-            linear_interpolation(polygon_buffer+j, polygon_buffer+j+1,
-                    parameter, &point_buffer);
+            linear_interpolation2f(polygon_buffer+j, 
+                    polygon_buffer+j+1, parameter, &point_buffer);
             polygon_buffer[j] = point_buffer;
         }   
     }
     /* Storing the last calculated point in res */
     (*res) = polygon_buffer[0];
+}
+
+/*
+ * Approximate a Bézier curve given its
+ * control polygon by a point set of a given 
+ * length using the Casteljau's algorithm prev.
+ * implemented (cf. bezier_point2f)
+ */
+void bezier_curve2f(point2f_t *control_polygon, size_t polygon_points,                   point2f_t *curve, unsigned int point_number)
+{
+    /* Loop through the regular subdivision 
+     * over the [0;1] interval 
+     */
+    float parameter = 0;
+    float h = 1.0/(float)point_number;
+    for (int i = 0;i < point_number; ++i)
+    {
+        /* Calculte the curve's point of
+         * the parameter and store in the curve
+         */
+        bezier_point2f(control_polygon, polygon_points, 
+                parameter, curve+i);
+        parameter += h;
+    }
 }

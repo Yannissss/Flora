@@ -16,6 +16,10 @@ typedef struct {
     pos2f_t start_pos;
     float depth, angle; // Rotation angle in degrees
 } l_system_t;
+typedef struct {
+    point2f_t *point_arr;
+    size_t size;
+} branch2f_t;
 
 /* L-System manipulation functions */
 size_t farm(l_system_t *l_system, char *axiom, 

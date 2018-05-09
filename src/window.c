@@ -84,10 +84,22 @@ void start_window(window_t *window_obj)
     /* Init drawer */
     drawer_2d_t drawer = { {0,0,0}, window_obj->config };
     init_drawer(&drawer);
+
+    /* Testing drawer */
     point2f_t *point_arr = NULL;
     size_t point_number = std_compile2f(&testing_s, 
             str, len, &point_arr);
-
+    point2f_t polygon[5] = {
+        {-0.25, 0.15}, 
+        {0.1, -0.4},
+        {0.75, 0.85},
+        {1.2, -0.78},
+        {2.5, -1.7}
+    };
+    unsigned int test_size = 850;
+    point2f_t curve[test_size];
+    bezier_curve2f(polygon, 5, curve, test_size);
+    
     /* Window loop */
     while (window_obj->running)
     {
@@ -100,7 +112,8 @@ void start_window(window_t *window_obj)
         glPointSize(1.25);
         
         /* Implement rendering here */
-        int drawn_points = draw_points(&drawer, point_arr, point_number);
+        // int drawn_points = draw_points(&drawer, point_arr, point_number);
+        int drawn_points = draw_points(&drawer, curve, test_size);
 
         /* Render debug infos */
         // TODO
@@ -118,6 +131,7 @@ void start_window(window_t *window_obj)
             window_obj->framerate = 1000/dt;
         }
     }
+    /* Free testing mem. */
     free(point_arr);
     free(str);
     return;
@@ -129,10 +143,9 @@ void handle_events(window_t *window_obj, void *drawer, unsigned int used_dim)
     /* Queuing events */
     while(SDL_PollEvent(&(window_obj->e)))
     {
-        /* Handle events for a 2d-drawer */
+        /* Handle events for the drawer */
         switch((window_obj->e).type)
         {
-
             case SDL_KEYDOWN:
             switch (window_obj->e.key.keysym.scancode)
             {

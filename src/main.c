@@ -8,7 +8,7 @@ config_t default_config = {
     800,          // Window width
     600,          // Window height
     60,           // Window framerate cap
-    250,          // Default view distance
+    2,          // Default view distance
     150,          // Travel speed in pixel/second
     95*PI/180,    // Angular speed in rad/second
     1.75,         // Scale sensitivity
