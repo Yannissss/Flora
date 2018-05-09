@@ -28,17 +28,23 @@ int main(int argc, const char *argv[])
     };
     /* L-System test */
     char *str = NULL;
-    size_t len = farm(&testing_s, "X", 1, &str);
-    printf("%s \n", str);
-    free(str);
-    char testing[32] = "fd{kkk{kk}-kk{kk{kk}k}}f";
-    printf("%s, %d \n", testing, strlen(testing));
-    size_t branch_number = count_branches(testing, 32);
+    size_t len = farm(&testing_s, "X", 2, &str);
+    size_t branch_number = count_branches(str, len);
     branch_str_t arr[branch_number];
-    branch_parse(testing, arr);
+    branch_parse(str, arr);
+    printf("%d, %s \n", len, str);
     for (int i = 0;i < branch_number; ++i)
-        printf("%d, %s \n", arr[i].len, arr[i].str);
+    {
+        printf("%d vs. %d ", arr[i].len,
+                strlen(arr[i].str));
+        if ( (arr[i].str)[arr[i].len] == '\0' )
+            printf("NULL end");
+        else
+            printf("%ld", (arr[i].str)[arr[i].len]);
+        printf(" %s \n", arr[i].str);
+    }
     free_branch(arr, branch_number);
+    free(str);
 
     ///* Create window & displays it */
     //window_t *window_obj = init_window(&default_config);

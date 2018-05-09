@@ -96,9 +96,10 @@ void branch_parse(char *str, branch_str_t *branch_arr)
                 branches[current_len] = malloc( 1 + new_len*sizeof(char) );
                 branches_pos[current_len] = branches[current_len];
                 str_lengths[current_len] = new_len;
+                memset(branches[current_len], '\0', new_len);
                 break;
             case '}':
-                branches_pos[index_stack->top] = '\0';
+                (*branches_pos[index_stack->top]) = '\0';
                 pop(&index_stack);
                 break;
             default:
