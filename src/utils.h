@@ -31,6 +31,11 @@ typedef struct {
 /* 3-D structures */
 // TODO
 
+/* Geometry algorithms */
+void linear_interpolation(point2f_t *a, point2f_t *b, 
+                         float paramter, point2f_t *res);
+void bezier_point(point2f_t *control_polygon, size_t polygon_points, 
+                 float parameter, point2f_t *res);
 
 /* Constants */
 
