@@ -70,25 +70,11 @@ void start_window(window_t *window_obj)
       window_obj->config->max_framerate;
     window_obj->running = 1;
 
-    /* Testing L-System constants */
-    l_system_t testing_s = {
-        "FF", 2,
-        "F+[[X]-X]-F[-FX]+X", 18,
-        {-5.0, -5.0, PI*65.0/180},
-        1, 25.0
-    };
-    /* L-System test */
-    char *str = NULL;
-    size_t len = farm(&testing_s, "X", 6, &str);
-
     /* Init drawer */
     drawer_2d_t drawer = { {0,0,0}, window_obj->config };
     init_drawer(&drawer);
 
     /* Testing drawer */
-    point2f_t *point_arr = NULL;
-    size_t point_number = std_compile2f(&testing_s, 
-            str, len, &point_arr);
     point2f_t polygon[5] = {
         {-0.25, 0.15}, 
         {0.1, -0.4},
@@ -112,7 +98,6 @@ void start_window(window_t *window_obj)
         glPointSize(1.25);
         
         /* Implement rendering here */
-        // int drawn_points = draw_points(&drawer, point_arr, point_number);
         int drawn_points = draw_points(&drawer, curve, test_size);
 
         /* Render debug infos */

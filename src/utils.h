@@ -16,6 +16,10 @@ struct std_stack {
     struct std_stack *pile;
 };
 typedef struct std_stack std_stack_t;
+typedef struct {
+    char *str;
+    size_t len;
+} branch_str_t;
 
 /* Geometric utils */
 
@@ -59,11 +63,17 @@ void bezier_curve2f(point2f_t *control_polygon, size_t polygon_points,
 int occurences(char *str, size_t len, int character);
 void string_insert(const char *source, size_t source_len, 
                    char *dest);
+size_t run_length(char *str, size_t len);
+size_t count_branches(char *str, size_t len);
+void branch_parse(char *str, branch_str_t *branch_arr);
+void free_branch(branch_str_t *arr, size_t size);
 
 /* Stack helpers */
 
 /* Standard stack helpers */
-// TODO
+void pop(std_stack_t **stack);
+void push(int new_top, std_stack_t **stack);
+void free_stack(std_stack_t *stack);
 
 /* 2-D stack helpers */
 void update2f_top(float x, float y, float angle,
