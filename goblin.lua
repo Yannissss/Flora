@@ -6,18 +6,18 @@
 local args = {...}
 
 -- Build constants
-local CXX      = "g++"
-local CXXFLAGS = "-std=c++14"
-local LDFLAGS  = "-lSDL2 -lGL"
-local SRCDIR   = "Sources/"
-local OBJDIR   = "Objects/"
+local CXX      = "gcc"
+local CXXFLAGS = "-Wall -g"
+local LDFLAGS  = "-lSDL2 -lGL -lm"
+local SRCDIR   = "src/"
+local OBJDIR   = "obj/"
 local BINDIR   = "./"
 local TARGET   = "flora"
 
 -- Compile function using os interface return compile log
 function compile(sourceFile)
   local output = io.popen(CXX.." "..LDFLAGS.." -c "..SRCDIR.."/"
-    ..sourceFile..".cpp -o "..OBJDIR.."/"..sourceFile..".o "
+    ..sourceFile..".c -o "..OBJDIR.."/"..sourceFile..".o "
     ..CXXFLAGS, "r")
   local i,_ = sourceFile:reverse():find("/") or #sourceFile,_
   local dir = sourceFile:sub(1,(#sourceFile-i))
@@ -33,10 +33,10 @@ end
 -- Find all C++ Sources file in the SRCDIR and return them as an array
 function getSourcesFiles()
   local sourcesFiles = {}
-  local output = io.popen("find "..SRCDIR..' -name "*.cpp"', "r")
+  local output = io.popen("find "..SRCDIR..' -name "*.c"', "r")
   for path in output:lines()
   do
-    path,_ = path:gsub(".cpp", "")
+    path,_ = path:gsub("%.c", "")
     path,_ = path:gsub(SRCDIR, "")
     table.insert(sourcesFiles, path)
   end
@@ -48,9 +48,9 @@ end
 -- and return true if the source file need to be compiled again
 function isUpToDate(sourceFile)
   local output = io.popen("date +%s -r "..
-    SRCDIR.."/"..sourceFile..".cpp", "r")
+    SRCDIR.."/"..sourceFile..".c", "r")
   local editDate = tonumber(output:read("*a")) or 0
-    io.popen("date +%s -r "..SRCDIR.."/"..sourceFile..".cpp", "r")
+    io.popen("date +%s -r "..SRCDIR.."/"..sourceFile..".c", "r")
   output:close()
   output = io.popen("date +%s -r "..
     OBJDIR.."/"..sourceFile..".o", "r")
@@ -83,7 +83,7 @@ else
   print(" -- \27[32mStarting to compile necessary objects \27[37m")
   for i,sourceFile in ipairs(compileQueue)
   do
-    local progress = math.floor(100*i/N)
+    local progress = math.floor(100*(i-1)/N)
     io.write("[CXX ")
     if (progress < 10)
     then
